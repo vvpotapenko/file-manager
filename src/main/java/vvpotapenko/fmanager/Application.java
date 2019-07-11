@@ -1,21 +1,30 @@
 package vvpotapenko.fmanager;
 
+import vvpotapenko.fmanager.model.DirectoryItem;
+import vvpotapenko.fmanager.providers.RootSource;
 import vvpotapenko.fmanager.ui.MainFrame;
 
 import javax.swing.*;
 
-public class Application {
+class Application {
 
     private MainFrame mainFrame;
+    private DirectoryItem treeRoot;
 
-    public void run() {
+    void run() {
         SwingUtilities.invokeLater(this::createAndShowGUI);
     }
 
     private void createAndShowGUI() {
-        // TODO create model
+        createModel();
         createView();
         mainFrame.setVisible(true);
+    }
+
+    private void createModel() {
+        treeRoot = new DirectoryItem("top", new RootSource(true));
+
+        // TODO create table
     }
 
     private void createView() {
@@ -25,9 +34,10 @@ public class Application {
             e.printStackTrace();
         }
 
-        mainFrame = new MainFrame();
+        mainFrame = new MainFrame(treeRoot);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         mainFrame.pack();
     }
+
 }

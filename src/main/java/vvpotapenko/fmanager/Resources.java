@@ -1,4 +1,4 @@
-package vvpotapenko.fmanager.ui;
+package vvpotapenko.fmanager;
 
 import java.text.MessageFormat;
 import java.util.Locale;
