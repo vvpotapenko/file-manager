@@ -1,6 +1,5 @@
 package vvpotapenko.fmanager.providers;
 
-import vvpotapenko.fmanager.Resources;
 import vvpotapenko.fmanager.model.DirectoryItem;
 import vvpotapenko.fmanager.model.FileItem;
 import vvpotapenko.fmanager.providers.local.MyComputerSource;
@@ -18,17 +17,27 @@ public class RootSource implements IDirectorySource {
     }
 
     @Override
-    public List<FileItem> loadChildren() throws Exception {
+    public List<FileItem> loadChildren() {
         List<FileItem> items = new ArrayList<>();
-        items.add(createMyComputerItem());
+        items.add(new MyComputerSource(this, onlyDirectories).createDirectoryItem());
         // TODO ftps
 
         return items;
     }
 
-    private FileItem createMyComputerItem() {
-        String name = Resources.getString("my.computer.label");
-        return new DirectoryItem(name, new MyComputerSource(this.onlyDirectories));
+    @Override
+    public boolean hasParent() {
+        return false;
+    }
+
+    @Override
+    public IDirectorySource getParent() {
+        return null;
+    }
+
+    @Override
+    public DirectoryItem createDirectoryItem() {
+        return new DirectoryItem("top", this);
     }
 
     @Override
@@ -39,5 +48,10 @@ public class RootSource implements IDirectorySource {
     @Override
     public void destroy() {
         // do nothing
+    }
+
+    @Override
+    public String getDisplaySize() {
+        return "";
     }
 }

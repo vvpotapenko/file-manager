@@ -22,4 +22,9 @@ class LocalFileSource extends BaseLocalFileSource implements IFileSource {
     public void destroy() {
         // do nothing
     }
+
+    @Override
+    public String getDisplaySize() {
+        return getDisplaySize(file);
+    }
 }

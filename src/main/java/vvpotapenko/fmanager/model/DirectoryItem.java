@@ -37,4 +37,8 @@ public class DirectoryItem extends FileItem {
         return true;
     }
 
+    public boolean hasParent() {
+        return getFileSource().hasParent();
+    }
+
 }

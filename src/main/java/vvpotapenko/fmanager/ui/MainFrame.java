@@ -2,7 +2,8 @@ package vvpotapenko.fmanager.ui;
 
 import vvpotapenko.fmanager.Resources;
 import vvpotapenko.fmanager.model.DirectoryItem;
-import vvpotapenko.fmanager.ui.list.FilesList;
+import vvpotapenko.fmanager.ui.table.FilesTable;
+import vvpotapenko.fmanager.ui.table.IFilesTableListener;
 import vvpotapenko.fmanager.ui.tree.FilesTree;
 import vvpotapenko.fmanager.ui.tree.IFilesTreeListener;
 
@@ -12,14 +13,21 @@ import java.awt.*;
 public class MainFrame extends JFrame {
 
     private final FilesTree filesTree;
+    private final FilesTable filesTable;
 
-    public MainFrame(DirectoryItem treeRoot, IFilesTreeListener listener) throws HeadlessException {
+    public MainFrame(
+            DirectoryItem treeRoot,
+            IFilesTreeListener treeListener,
+            IFilesTableListener tableListener) throws HeadlessException {
         super(Resources.getString("app.name"));
 
-        filesTree = new FilesTree(treeRoot, listener);
-        FilesList filesList = new FilesList();
+        filesTree = new FilesTree(treeRoot, treeListener);
+        filesTable = new FilesTable(tableListener);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, filesTree, filesList);
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(filesTable, BorderLayout.CENTER);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, filesTree, panel);
         splitPane.setDividerLocation(200);
 
         getContentPane().add(splitPane);
@@ -27,5 +35,9 @@ public class MainFrame extends JFrame {
 
     public void refreshTree(DirectoryItem item) {
         filesTree.refreshTree(item);
+    }
+
+    public void updateTable(DirectoryItem directoryItem) {
+        filesTable.showFiles(directoryItem);
     }
 }

@@ -1,5 +1,7 @@
 package vvpotapenko.fmanager.providers.local;
 
+import vvpotapenko.fmanager.Resources;
+import vvpotapenko.fmanager.model.DirectoryItem;
 import vvpotapenko.fmanager.model.FileItem;
 import vvpotapenko.fmanager.providers.IDirectorySource;
 
@@ -9,12 +11,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MyComputerSource extends BaseLocalFileSource implements IDirectorySource {
+public class MyComputerSource extends LocalDirectorySource implements IDirectorySource {
 
-    private final boolean onlyDirectories;
-
-    public MyComputerSource(boolean onlyDirectories) {
-        this.onlyDirectories = onlyDirectories;
+    public MyComputerSource(IDirectorySource parent, boolean onlyDirectories) {
+        super(null, parent, onlyDirectories);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class MyComputerSource extends BaseLocalFileSource implements IDirectoryS
         } else {
             List<FileItem> children = new ArrayList<>();
             for (File file : files) {
-                children.add(createFileItem(file, this.onlyDirectories));
+                children.add(createFileItem(file, this, this.onlyDirectories));
             }
             return children;
         }
@@ -37,7 +37,8 @@ public class MyComputerSource extends BaseLocalFileSource implements IDirectoryS
     }
 
     @Override
-    public void destroy() {
-        // do nothing
+    public DirectoryItem createDirectoryItem() {
+        String name = Resources.getString("my.computer.label");
+        return new DirectoryItem(name, new MyComputerSource(this, onlyDirectories));
     }
 }

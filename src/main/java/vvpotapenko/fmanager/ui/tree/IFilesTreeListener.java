@@ -4,7 +4,7 @@ import vvpotapenko.fmanager.model.DirectoryItem;
 
 public interface IFilesTreeListener {
 
-    void handleOpenDirectory(DirectoryItem directoryItem);
+    void directoryExpanded(DirectoryItem directoryItem);
 
-    void handleCloseDirectory(DirectoryItem directoryItem);
+    void directoryCollapsed(DirectoryItem directoryItem);
 }

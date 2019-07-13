@@ -22,6 +22,10 @@ public class FileItem {
         return fileSource.getSystemIcon();
     }
 
+    public String getDisplaySize() {
+        return fileSource.getDisplaySize();
+    }
+
     public IFileSource getFileSource() {
         return fileSource;
     }

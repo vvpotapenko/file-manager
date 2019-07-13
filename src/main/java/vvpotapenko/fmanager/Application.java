@@ -3,13 +3,16 @@ package vvpotapenko.fmanager;
 import vvpotapenko.fmanager.model.DirectoryItem;
 import vvpotapenko.fmanager.providers.RootSource;
 import vvpotapenko.fmanager.tasks.DestroyTreeChildrenTask;
+import vvpotapenko.fmanager.tasks.LoadParentTableChildrenTask;
+import vvpotapenko.fmanager.tasks.LoadTableChildrenTask;
 import vvpotapenko.fmanager.tasks.LoadTreeChildrenTask;
 import vvpotapenko.fmanager.ui.MainFrame;
+import vvpotapenko.fmanager.ui.table.IFilesTableListener;
 import vvpotapenko.fmanager.ui.tree.IFilesTreeListener;
 
 import javax.swing.*;
 
-public class Application implements IFilesTreeListener {
+public class Application {
 
     private MainFrame mainFrame;
     private DirectoryItem treeRoot;
@@ -19,15 +22,11 @@ public class Application implements IFilesTreeListener {
     }
 
     private void createAndShowGUI() {
-        createModel();
+        treeRoot = new RootSource(true).createDirectoryItem();
         createView();
-        mainFrame.setVisible(true);
-    }
 
-    private void createModel() {
-        treeRoot = new DirectoryItem("top", new RootSource(true));
-
-        // TODO create table
+        DirectoryItem tableDir = new DirectoryItem("top", new RootSource(false));
+        new LoadTableChildrenTask(tableDir, this).execute();
     }
 
     private void createView() {
@@ -37,23 +36,41 @@ public class Application implements IFilesTreeListener {
             e.printStackTrace();
         }
 
-        mainFrame = new MainFrame(treeRoot, this);
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame = new MainFrame(treeRoot,
+                new IFilesTreeListener() {
+                    @Override
+                    public void directoryExpanded(DirectoryItem directoryItem) {
+                        new LoadTreeChildrenTask(directoryItem, Application.this).execute();
+                    }
 
+                    @Override
+                    public void directoryCollapsed(DirectoryItem directoryItem) {
+                        new DestroyTreeChildrenTask(directoryItem, Application.this).execute();
+                    }
+                },
+                new IFilesTableListener() {
+                    @Override
+                    public void directoryClicked(DirectoryItem directoryItem) {
+                        new LoadTableChildrenTask(directoryItem, Application.this).execute();
+                    }
+
+                    @Override
+                    public void upClicked(DirectoryItem currentDir) {
+                        new LoadParentTableChildrenTask(currentDir, Application.this).execute();
+                    }
+                });
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.pack();
+        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        mainFrame.setVisible(true);
+    }
+
+    public void tableChildrenLoaded(DirectoryItem directoryItem) {
+        mainFrame.updateTable(directoryItem);
     }
 
     public void treeChildrenLoaded(DirectoryItem directoryItem) {
         mainFrame.refreshTree(directoryItem);
     }
 
-    @Override
-    public void handleOpenDirectory(DirectoryItem directoryItem) {
-        new LoadTreeChildrenTask(directoryItem, this).execute();
-    }
-
-    @Override
-    public void handleCloseDirectory(DirectoryItem directoryItem) {
-        new DestroyTreeChildrenTask(directoryItem, this).execute();
-    }
 }

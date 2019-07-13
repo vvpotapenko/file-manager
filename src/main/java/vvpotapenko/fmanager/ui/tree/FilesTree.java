@@ -39,7 +39,7 @@ public class FilesTree extends JScrollPane {
             }
         });
 
-        listener.handleOpenDirectory(root);
+        listener.directoryExpanded(root);
 
         setViewportView(tree);
     }
@@ -47,14 +47,14 @@ public class FilesTree extends JScrollPane {
     private void handleCollapseNode(DefaultMutableTreeNode node) {
         Object object = node.getUserObject();
         if (object instanceof DirectoryItem) {
-            listener.handleCloseDirectory((DirectoryItem) object);
+            listener.directoryCollapsed((DirectoryItem) object);
         }
     }
 
     private void handleExpandNode(DefaultMutableTreeNode node) {
         Object object = node.getUserObject();
         if (object instanceof DirectoryItem) {
-            listener.handleOpenDirectory((DirectoryItem) object);
+            listener.directoryExpanded((DirectoryItem) object);
         }
     }
 
