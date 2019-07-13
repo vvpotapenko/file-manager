@@ -23,6 +23,10 @@ public class DirectoryItem extends FileItem {
         children.addAll(newChildren);
     }
 
+    public void clearChildren() {
+        children.clear();
+    }
+
     @Override
     public IDirectorySource getFileSource() {
         return (IDirectorySource) super.getFileSource();

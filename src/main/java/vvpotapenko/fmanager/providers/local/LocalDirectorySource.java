@@ -4,6 +4,7 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import vvpotapenko.fmanager.model.FileItem;
 import vvpotapenko.fmanager.providers.IDirectorySource;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
@@ -18,6 +19,16 @@ public class LocalDirectorySource extends BaseLocalFileSource implements IDirect
     LocalDirectorySource(File file, boolean onlyDirectories) {
         this.file = file;
         this.onlyDirectories = onlyDirectories;
+    }
+
+    @Override
+    public Icon getSystemIcon() {
+        return getSystemIcon(file);
+    }
+
+    @Override
+    public void destroy() {
+        // do nothing
     }
 
     @Override

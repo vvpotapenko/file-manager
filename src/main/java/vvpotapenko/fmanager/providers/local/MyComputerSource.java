@@ -3,6 +3,7 @@ package vvpotapenko.fmanager.providers.local;
 import vvpotapenko.fmanager.model.FileItem;
 import vvpotapenko.fmanager.providers.IDirectorySource;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,5 +29,15 @@ public class MyComputerSource extends BaseLocalFileSource implements IDirectoryS
             }
             return children;
         }
+    }
+
+    @Override
+    public Icon getSystemIcon() {
+        return null;
+    }
+
+    @Override
+    public void destroy() {
+        // do nothing
     }
 }

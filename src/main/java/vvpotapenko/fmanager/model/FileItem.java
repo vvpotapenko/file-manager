@@ -2,6 +2,8 @@ package vvpotapenko.fmanager.model;
 
 import vvpotapenko.fmanager.providers.IFileSource;
 
+import javax.swing.*;
+
 public class FileItem {
 
     private final String name;
@@ -14,6 +16,10 @@ public class FileItem {
 
     public String getName() {
         return name;
+    }
+
+    public Icon getSystemIcon() {
+        return fileSource.getSystemIcon();
     }
 
     public IFileSource getFileSource() {

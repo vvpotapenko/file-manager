@@ -3,6 +3,7 @@ package vvpotapenko.fmanager.providers.local;
 import vvpotapenko.fmanager.model.DirectoryItem;
 import vvpotapenko.fmanager.model.FileItem;
 
+import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 
@@ -17,5 +18,9 @@ abstract class BaseLocalFileSource {
         } else {
             return new FileItem(name, new LocalFileSource(file));
         }
+    }
+
+    Icon getSystemIcon(File file) {
+        return fileSystemView.getSystemIcon(file);
     }
 }

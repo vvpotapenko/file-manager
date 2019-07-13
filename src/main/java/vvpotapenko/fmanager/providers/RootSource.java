@@ -5,6 +5,7 @@ import vvpotapenko.fmanager.model.DirectoryItem;
 import vvpotapenko.fmanager.model.FileItem;
 import vvpotapenko.fmanager.providers.local.MyComputerSource;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,5 +29,15 @@ public class RootSource implements IDirectorySource {
     private FileItem createMyComputerItem() {
         String name = Resources.getString("my.computer.label");
         return new DirectoryItem(name, new MyComputerSource(this.onlyDirectories));
+    }
+
+    @Override
+    public Icon getSystemIcon() {
+        return null;
+    }
+
+    @Override
+    public void destroy() {
+        // do nothing
     }
 }

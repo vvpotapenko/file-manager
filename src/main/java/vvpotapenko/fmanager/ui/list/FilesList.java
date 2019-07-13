@@ -1,11 +1,11 @@
-package vvpotapenko.fmanager.ui;
+package vvpotapenko.fmanager.ui.list;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class ListPanel extends JPanel {
+public class FilesList extends JPanel {
 
-    public ListPanel() {
+    public FilesList() {
         initializeLayout();
     }
 
