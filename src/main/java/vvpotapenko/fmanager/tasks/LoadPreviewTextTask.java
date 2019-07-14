@@ -26,7 +26,7 @@ public class LoadPreviewTextTask extends BaseTask<String, Object> {
     protected void done() {
         try {
             String data = get();
-            app.previewTextLoaded(data);
+            app.previewTextLoaded(data, fileItem.getName());
         } catch (Exception e) {
             handleException(e);
         }

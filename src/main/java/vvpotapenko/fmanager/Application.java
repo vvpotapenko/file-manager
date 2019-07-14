@@ -10,6 +10,7 @@ import vvpotapenko.fmanager.ui.table.IFilesTableListener;
 import vvpotapenko.fmanager.ui.tree.IFilesTreeListener;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Application {
 
@@ -81,8 +82,13 @@ public class Application {
             return;
         }
 
-        if (fileType == FileType.TEXT) {
-            new LoadPreviewTextTask(fileItem, this).execute();
+        switch (fileType) {
+            case TEXT:
+                new LoadPreviewTextTask(fileItem, this).execute();
+                break;
+            case JPG:
+                new LoadPreviewImageTask(fileItem, this).execute();
+                break;
         }
     }
 
@@ -94,7 +100,11 @@ public class Application {
         mainFrame.refreshTree(directoryItem);
     }
 
-    public void previewTextLoaded(String text) {
-        mainFrame.showPreviewText(text);
+    public void previewTextLoaded(String text, String fileName) {
+        mainFrame.showPreviewText(text, fileName);
+    }
+
+    public void previewImageLoaded(Image img, String fileName) {
+        mainFrame.showPreviewImage(img, fileName);
     }
 }
