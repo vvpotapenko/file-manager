@@ -41,4 +41,11 @@ public class MyComputerSource extends LocalDirectorySource implements IDirectory
         String name = Resources.getString("my.computer.label");
         return new DirectoryItem(name, new MyComputerSource(this, onlyDirectories));
     }
+
+    @Override
+    public IDirectorySource clone(boolean onlyDirs) {
+        IDirectorySource parent = getParent();
+        IDirectorySource clonedParent = parent != null ? parent.clone(onlyDirs) : null;
+        return new MyComputerSource(clonedParent, onlyDirs);
+    }
 }

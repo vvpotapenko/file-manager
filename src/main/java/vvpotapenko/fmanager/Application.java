@@ -2,10 +2,7 @@ package vvpotapenko.fmanager;
 
 import vvpotapenko.fmanager.model.DirectoryItem;
 import vvpotapenko.fmanager.providers.RootSource;
-import vvpotapenko.fmanager.tasks.DestroyTreeChildrenTask;
-import vvpotapenko.fmanager.tasks.LoadParentTableChildrenTask;
-import vvpotapenko.fmanager.tasks.LoadTableChildrenTask;
-import vvpotapenko.fmanager.tasks.LoadTreeChildrenTask;
+import vvpotapenko.fmanager.tasks.*;
 import vvpotapenko.fmanager.ui.MainFrame;
 import vvpotapenko.fmanager.ui.table.IFilesTableListener;
 import vvpotapenko.fmanager.ui.tree.IFilesTreeListener;
@@ -46,6 +43,11 @@ public class Application {
                     @Override
                     public void directoryCollapsed(DirectoryItem directoryItem) {
                         new DestroyTreeChildrenTask(directoryItem, Application.this).execute();
+                    }
+
+                    @Override
+                    public void directorySelected(DirectoryItem directoryItem) {
+                        new LoadTableFromTreeTask(directoryItem, Application.this).execute();
                     }
                 },
                 new IFilesTableListener() {

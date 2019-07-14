@@ -14,4 +14,6 @@ public interface IDirectorySource extends IFileSource {
     IDirectorySource getParent();
 
     DirectoryItem createDirectoryItem();
+
+    IDirectorySource clone(boolean onlyDirs);
 }

@@ -41,6 +41,11 @@ public class RootSource implements IDirectorySource {
     }
 
     @Override
+    public IDirectorySource clone(boolean onlyDirs) {
+        return new RootSource(onlyDirs);
+    }
+
+    @Override
     public Icon getSystemIcon() {
         return null;
     }

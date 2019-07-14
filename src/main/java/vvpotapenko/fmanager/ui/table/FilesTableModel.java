@@ -4,6 +4,7 @@ import vvpotapenko.fmanager.Resources;
 import vvpotapenko.fmanager.model.DirectoryItem;
 import vvpotapenko.fmanager.model.FileItem;
 
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,15 +38,17 @@ public class FilesTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 2;
+        return 3;
     }
 
     @Override
     public String getColumnName(int column) {
         switch (column) {
             case 0:
-                return Resources.getString("name.label");
+                return "";
             case 1:
+                return Resources.getString("name.label");
+            case 2:
                 return Resources.getString("size.label");
             default:
                 return super.getColumnName(column);
@@ -57,11 +60,22 @@ public class FilesTableModel extends AbstractTableModel {
         FilesTableRow row = rows.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return row.getName();
+                return row.getSystemIcon();
             case 1:
+                return row.getName();
+            case 2:
                 return row.getSize();
             default:
                 return null;
         }
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        if (columnIndex == 0) {
+            return ImageIcon.class;
+        }
+        return super.getColumnClass(columnIndex);
+
     }
 }

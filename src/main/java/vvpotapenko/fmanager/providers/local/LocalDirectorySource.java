@@ -10,9 +10,20 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class LocalDirectorySource extends BaseLocalFileSource implements IDirectorySource {
+
+    private static final Comparator<FileItem> defaultFilesComparator = (o1, o2) -> {
+        if (o1.isDirectory() && !o2.isDirectory()) {
+            return -1;
+        }
+        if (o2.isDirectory() && !o1.isDirectory()) {
+            return 1;
+        }
+        return o1.getName().compareTo(o2.getName());
+    };
 
     final boolean onlyDirectories;
 
@@ -56,6 +67,7 @@ public class LocalDirectorySource extends BaseLocalFileSource implements IDirect
             for (File file : files) {
                 children.add(createFileItem(file, this, onlyDirectories));
             }
+            children.sort(defaultFilesComparator);
             return children;
         }
     }
@@ -68,5 +80,12 @@ public class LocalDirectorySource extends BaseLocalFileSource implements IDirect
     @Override
     public DirectoryItem createDirectoryItem() {
         return new DirectoryItem(getSystemDisplayName(file), this);
+    }
+
+    @Override
+    public IDirectorySource clone(boolean onlyDirs) {
+        IDirectorySource parent = getParent();
+        IDirectorySource clonedParent = parent != null ? parent.clone(onlyDirs) : null;
+        return new LocalDirectorySource(file, clonedParent, onlyDirs);
     }
 }

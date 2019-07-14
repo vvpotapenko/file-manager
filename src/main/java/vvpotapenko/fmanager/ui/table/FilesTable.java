@@ -33,10 +33,12 @@ public class FilesTable extends JScrollPane {
         table = new JTable();
         table.setModel(new FilesTableModel());
         table.setShowVerticalLines(false);
+        table.setShowHorizontalLines(false);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         table.setRowHeight(32);
-        table.getColumnModel().getColumn(1).setMaxWidth(150);
+        table.getColumnModel().getColumn(0).setMaxWidth(150);
+        table.getColumnModel().getColumn(2).setMaxWidth(150);
 
         table.addMouseListener(new MouseAdapter() {
             @Override

@@ -7,4 +7,6 @@ public interface IFilesTreeListener {
     void directoryExpanded(DirectoryItem directoryItem);
 
     void directoryCollapsed(DirectoryItem directoryItem);
+
+    void directorySelected(DirectoryItem directoryItem);
 }

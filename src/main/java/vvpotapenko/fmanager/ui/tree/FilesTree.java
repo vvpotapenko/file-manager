@@ -29,14 +29,18 @@ public class FilesTree extends JScrollPane {
             @Override
             public void treeExpanded(TreeExpansionEvent event) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
-                handleExpandNode(node);
+                nodeExpended(node);
             }
 
             @Override
             public void treeCollapsed(TreeExpansionEvent event) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
-                handleCollapseNode(node);
+                nodeCollapsed(node);
             }
+        });
+        tree.addTreeSelectionListener(event -> {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
+            nodeSelected(node);
         });
 
         listener.directoryExpanded(root);
@@ -44,17 +48,24 @@ public class FilesTree extends JScrollPane {
         setViewportView(tree);
     }
 
-    private void handleCollapseNode(DefaultMutableTreeNode node) {
+    private void nodeCollapsed(DefaultMutableTreeNode node) {
         Object object = node.getUserObject();
         if (object instanceof DirectoryItem) {
             listener.directoryCollapsed((DirectoryItem) object);
         }
     }
 
-    private void handleExpandNode(DefaultMutableTreeNode node) {
+    private void nodeExpended(DefaultMutableTreeNode node) {
         Object object = node.getUserObject();
         if (object instanceof DirectoryItem) {
             listener.directoryExpanded((DirectoryItem) object);
+        }
+    }
+
+    private void nodeSelected(DefaultMutableTreeNode node) {
+        Object object = node.getUserObject();
+        if (object instanceof DirectoryItem) {
+            listener.directorySelected((DirectoryItem) object);
         }
     }
 

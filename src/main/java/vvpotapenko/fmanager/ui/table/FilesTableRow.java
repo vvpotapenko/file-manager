@@ -2,6 +2,8 @@ package vvpotapenko.fmanager.ui.table;
 
 import vvpotapenko.fmanager.model.FileItem;
 
+import javax.swing.*;
+
 class FilesTableRow {
 
     private final FileItem fileItem;
@@ -20,5 +22,9 @@ class FilesTableRow {
 
     String getSize() {
         return fileItem == null ? "" : fileItem.getDisplaySize();
+    }
+
+    Icon getSystemIcon() {
+        return fileItem == null ? null : fileItem.getSystemIcon();
     }
 }
