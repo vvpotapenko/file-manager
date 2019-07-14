@@ -17,7 +17,7 @@ import java.util.List;
 
 public class LocalDirectorySource extends BaseLocalFileSource implements IDirectorySource {
 
-    private static final Comparator<FileItem> defaultFilesComparator = (o1, o2) -> {
+    static final Comparator<FileItem> defaultFilesComparator = (o1, o2) -> {
         if (o1.isDirectory() && !o2.isDirectory()) {
             return -1;
         }
@@ -28,8 +28,8 @@ public class LocalDirectorySource extends BaseLocalFileSource implements IDirect
     };
 
     final boolean onlyDirectories;
+    final File file;
 
-    private final File file;
     private final IDirectorySource parent;
 
     LocalDirectorySource(File file, IDirectorySource parent, boolean onlyDirectories) {
@@ -54,7 +54,7 @@ public class LocalDirectorySource extends BaseLocalFileSource implements IDirect
     }
 
     @Override
-    public InputStream createInputStream() throws IOException {
+    public InputStream createInputStream() throws Exception {
         throw new IOException("Directory is cannot be read");
     }
 
@@ -64,7 +64,7 @@ public class LocalDirectorySource extends BaseLocalFileSource implements IDirect
     }
 
     @Override
-    public List<FileItem> loadChildren() {
+    public List<FileItem> loadChildren() throws Exception {
         FileFilter filter = onlyDirectories ? FileFilterUtils.directoryFileFilter() : FileFilterUtils.trueFileFilter();
         File[] files = file.listFiles(filter);
         if (files == null || files.length == 0) {

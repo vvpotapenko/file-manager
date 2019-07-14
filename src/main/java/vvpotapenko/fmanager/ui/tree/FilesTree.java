@@ -71,5 +71,9 @@ public class FilesTree extends JScrollPane {
 
     public void refreshTree(DirectoryItem item) {
         getModel().refreshNode(item);
+        if (!item.hasParent()) {
+            // it is a root
+            tree.expandRow(0);
+        }
     }
 }

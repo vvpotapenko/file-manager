@@ -20,6 +20,8 @@ abstract class BaseLocalFileSource {
         String name = getSystemDisplayName(file);
         if (file.isDirectory()) {
             return new DirectoryItem(name, new LocalDirectorySource(file, parent, onlyDirs));
+        } else if (file.getName().toLowerCase().endsWith(".zip")) {
+            return new DirectoryItem(name, new ZipDirectorySource(file, parent, onlyDirs));
         } else {
             FileType fileType = fileTypeDetector.getFileType(file.getName());
             return new FileItem(name, fileType, new LocalFileSource(file));
