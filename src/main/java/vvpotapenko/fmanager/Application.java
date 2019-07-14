@@ -87,6 +87,7 @@ public class Application {
                 new LoadPreviewTextTask(fileItem, this).execute();
                 break;
             case JPG:
+            case PNG:
                 new LoadPreviewImageTask(fileItem, this).execute();
                 break;
         }

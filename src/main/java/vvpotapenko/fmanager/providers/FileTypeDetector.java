@@ -17,6 +17,9 @@ public class FileTypeDetector {
         if (fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg")) {
             return FileType.JPG;
         }
+        if (fileName.toLowerCase().endsWith(".png")) {
+            return FileType.PNG;
+        }
         return FileType.UNKNOWN;
     }
 }
