@@ -9,11 +9,10 @@ import java.io.InputStream;
 public class LoadPreviewTextTask extends BaseTask<String, Object> {
 
     private final FileItem fileItem;
-    private final Application app;
 
     public LoadPreviewTextTask(FileItem fileItem, Application app) {
+        super(app);
         this.fileItem = fileItem;
-        this.app = app;
     }
 
     @Override
@@ -23,12 +22,8 @@ public class LoadPreviewTextTask extends BaseTask<String, Object> {
     }
 
     @Override
-    protected void done() {
-        try {
-            String data = get();
-            app.previewTextLoaded(data, fileItem.getName());
-        } catch (Exception e) {
-            handleException(e);
-        }
+    void handleResult(String result) {
+        app.previewTextLoaded(result, fileItem.getName());
     }
+
 }

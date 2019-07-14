@@ -10,11 +10,10 @@ import java.util.List;
 public class LoadParentTableChildrenTask extends BaseTask<DirectoryItem, Object> {
 
     private final DirectoryItem directoryItem;
-    private final Application app;
 
     public LoadParentTableChildrenTask(DirectoryItem directoryItem, Application app) {
+        super(app);
         this.directoryItem = directoryItem;
-        this.app = app;
     }
 
     @Override
@@ -32,12 +31,7 @@ public class LoadParentTableChildrenTask extends BaseTask<DirectoryItem, Object>
     }
 
     @Override
-    protected void done() {
-        try {
-            DirectoryItem directoryItem = get();
-            app.tableChildrenLoaded(directoryItem);
-        } catch (Exception e) {
-            handleException(e);
-        }
+    void handleResult(DirectoryItem result) {
+        app.tableChildrenLoaded(result);
     }
 }

@@ -7,15 +7,14 @@ import vvpotapenko.fmanager.model.FileItem;
 public class DestroyTreeChildrenTask extends BaseTask<Object, Object> {
 
     private final DirectoryItem directoryItem;
-    private final Application app;
 
     public DestroyTreeChildrenTask(DirectoryItem directoryItem, Application app) {
+        super(app);
         this.directoryItem = directoryItem;
-        this.app = app;
     }
 
     @Override
-    protected Object doInBackground() throws Exception {
+    protected Object doInBackground() {
         for (FileItem fileItem : directoryItem.getChildren()) {
             fileItem.getFileSource().destroy();
         }
@@ -23,13 +22,8 @@ public class DestroyTreeChildrenTask extends BaseTask<Object, Object> {
     }
 
     @Override
-    protected void done() {
-        try {
-            get();
-            directoryItem.clearChildren();
-            app.treeChildrenLoaded(directoryItem);
-        } catch (Exception e) {
-            handleException(e);
-        }
+    void handleResult(Object result) {
+        directoryItem.clearChildren();
+        app.treeChildrenLoaded(directoryItem);
     }
 }

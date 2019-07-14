@@ -11,11 +11,10 @@ import java.io.InputStream;
 public class LoadPreviewImageTask extends BaseTask<Image, Object> {
 
     private final FileItem fileItem;
-    private final Application app;
 
     public LoadPreviewImageTask(FileItem fileItem, Application app) {
+        super(app);
         this.fileItem = fileItem;
-        this.app = app;
     }
 
     @Override
@@ -34,12 +33,7 @@ public class LoadPreviewImageTask extends BaseTask<Image, Object> {
     }
 
     @Override
-    protected void done() {
-        try {
-            Image img = get();
-            app.previewImageLoaded(img, fileItem.getName());
-        } catch (Exception e) {
-            handleException(e);
-        }
+    void handleResult(Image result) {
+        app.previewImageLoaded(result, fileItem.getName());
     }
 }

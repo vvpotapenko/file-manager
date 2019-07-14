@@ -9,11 +9,10 @@ import java.util.List;
 public class LoadTreeChildrenTask extends BaseTask<List<FileItem>, Object> {
 
     private final DirectoryItem directoryItem;
-    private final Application app;
 
     public LoadTreeChildrenTask(DirectoryItem directoryItem, Application app) {
+        super(app);
         this.directoryItem = directoryItem;
-        this.app = app;
     }
 
     @Override
@@ -22,14 +21,8 @@ public class LoadTreeChildrenTask extends BaseTask<List<FileItem>, Object> {
     }
 
     @Override
-    protected void done() {
-        try {
-            List<FileItem> fileItems = get();
-            directoryItem.setChildren(fileItems);
-
-            app.treeChildrenLoaded(directoryItem);
-        } catch (Exception e) {
-            handleException(e);
-        }
+    void handleResult(List<FileItem> result) {
+        directoryItem.setChildren(result);
+        app.treeChildrenLoaded(directoryItem);
     }
 }

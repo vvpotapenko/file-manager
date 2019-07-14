@@ -9,11 +9,10 @@ import java.util.List;
 public class LoadTableFromTreeTask extends BaseTask<DirectoryItem, Object> {
 
     private final DirectoryItem treeDirectoryItem;
-    private final Application app;
 
     public LoadTableFromTreeTask(DirectoryItem treeDirectoryItem, Application app) {
+        super(app);
         this.treeDirectoryItem = treeDirectoryItem;
-        this.app = app;
     }
 
     @Override
@@ -26,12 +25,7 @@ public class LoadTableFromTreeTask extends BaseTask<DirectoryItem, Object> {
     }
 
     @Override
-    protected void done() {
-        try {
-            DirectoryItem directoryItem = get();
-            app.tableChildrenLoaded(directoryItem);
-        } catch (Exception e) {
-            handleException(e);
-        }
+    void handleResult(DirectoryItem result) {
+        app.tableChildrenLoaded(result);
     }
 }
