@@ -8,6 +8,8 @@ import vvpotapenko.fmanager.providers.IDirectorySource;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,6 +51,11 @@ public class LocalDirectorySource extends BaseLocalFileSource implements IDirect
     @Override
     public String getDisplaySize() {
         return "";
+    }
+
+    @Override
+    public InputStream createInputStream() throws IOException {
+        throw new IOException("Directory is cannot be read");
     }
 
     @Override

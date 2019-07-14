@@ -2,6 +2,7 @@ package vvpotapenko.fmanager.ui;
 
 import vvpotapenko.fmanager.Resources;
 import vvpotapenko.fmanager.model.DirectoryItem;
+import vvpotapenko.fmanager.ui.preview.PreviewTextDialog;
 import vvpotapenko.fmanager.ui.table.FilesTable;
 import vvpotapenko.fmanager.ui.table.IFilesTableListener;
 import vvpotapenko.fmanager.ui.tree.FilesTree;
@@ -39,5 +40,18 @@ public class MainFrame extends JFrame {
 
     public void updateTable(DirectoryItem directoryItem) {
         filesTable.showFiles(directoryItem);
+    }
+
+    public void showPreviewText(String text) {
+        PreviewTextDialog dialog = new PreviewTextDialog(this, text);
+        dialog.setVisible(true);
+    }
+
+    public void showWarningMessage(String message) {
+        JOptionPane.showMessageDialog(
+                this,
+                message,
+                Resources.getString("app.name"),
+                JOptionPane.WARNING_MESSAGE);
     }
 }

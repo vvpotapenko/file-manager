@@ -5,6 +5,8 @@ import vvpotapenko.fmanager.model.FileItem;
 import vvpotapenko.fmanager.providers.local.MyComputerSource;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,5 +60,10 @@ public class RootSource implements IDirectorySource {
     @Override
     public String getDisplaySize() {
         return "";
+    }
+
+    @Override
+    public InputStream createInputStream() throws Exception {
+        throw new IOException("Root is cannot be read");
     }
 }

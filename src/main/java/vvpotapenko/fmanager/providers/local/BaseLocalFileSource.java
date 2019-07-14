@@ -3,6 +3,8 @@ package vvpotapenko.fmanager.providers.local;
 import org.apache.commons.io.FileUtils;
 import vvpotapenko.fmanager.model.DirectoryItem;
 import vvpotapenko.fmanager.model.FileItem;
+import vvpotapenko.fmanager.model.FileType;
+import vvpotapenko.fmanager.providers.FileTypeDetector;
 import vvpotapenko.fmanager.providers.IDirectorySource;
 
 import javax.swing.*;
@@ -11,14 +13,16 @@ import java.io.File;
 
 abstract class BaseLocalFileSource {
 
-    private FileSystemView fileSystemView = FileSystemView.getFileSystemView();
+    private final FileTypeDetector fileTypeDetector = new FileTypeDetector();
+    private final FileSystemView fileSystemView = FileSystemView.getFileSystemView();
 
     FileItem createFileItem(File file, IDirectorySource parent, boolean onlyDirs) {
         String name = getSystemDisplayName(file);
         if (file.isDirectory()) {
             return new DirectoryItem(name, new LocalDirectorySource(file, parent, onlyDirs));
         } else {
-            return new FileItem(name, new LocalFileSource(file));
+            FileType fileType = fileTypeDetector.getFileType(file.getName());
+            return new FileItem(name, fileType, new LocalFileSource(file));
         }
     }
 

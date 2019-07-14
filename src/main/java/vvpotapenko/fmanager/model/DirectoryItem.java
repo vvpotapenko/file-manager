@@ -11,7 +11,7 @@ public class DirectoryItem extends FileItem {
     private final List<FileItem> children = new ArrayList<>();
 
     public DirectoryItem(String name, IFileSource fileSource) {
-        super(name, fileSource);
+        super(name, FileType.DIRECTORY, fileSource);
     }
 
     public List<FileItem> getChildren() {

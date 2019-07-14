@@ -1,6 +1,7 @@
 package vvpotapenko.fmanager.providers;
 
 import javax.swing.*;
+import java.io.InputStream;
 
 public interface IFileSource {
 
@@ -9,4 +10,6 @@ public interface IFileSource {
     void destroy();
 
     String getDisplaySize();
+
+    InputStream createInputStream() throws Exception;
 }

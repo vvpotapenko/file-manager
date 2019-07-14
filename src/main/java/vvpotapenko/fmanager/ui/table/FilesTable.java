@@ -61,7 +61,7 @@ public class FilesTable extends JScrollPane {
         } else if (fileItem.isDirectory()) {
             listener.directoryClicked((DirectoryItem) fileItem);
         } else {
-            // TODO show file preview
+            listener.fileClicked(fileItem);
         }
     }
 }

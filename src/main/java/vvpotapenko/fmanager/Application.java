@@ -1,6 +1,8 @@
 package vvpotapenko.fmanager;
 
 import vvpotapenko.fmanager.model.DirectoryItem;
+import vvpotapenko.fmanager.model.FileItem;
+import vvpotapenko.fmanager.model.FileType;
 import vvpotapenko.fmanager.providers.RootSource;
 import vvpotapenko.fmanager.tasks.*;
 import vvpotapenko.fmanager.ui.MainFrame;
@@ -60,11 +62,28 @@ public class Application {
                     public void upClicked(DirectoryItem currentDir) {
                         new LoadParentTableChildrenTask(currentDir, Application.this).execute();
                     }
+
+                    @Override
+                    public void fileClicked(FileItem fileItem) {
+                        handlePreviewFile(fileItem);
+                    }
                 });
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.pack();
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainFrame.setVisible(true);
+    }
+
+    private void handlePreviewFile(FileItem fileItem) {
+        FileType fileType = fileItem.getFileType();
+        if (fileType == null || fileType == FileType.UNKNOWN) {
+            mainFrame.showWarningMessage(Resources.getString("file.type.was.not.detected"));
+            return;
+        }
+
+        if (fileType == FileType.TEXT) {
+            new LoadPreviewTextTask(fileItem, this).execute();
+        }
     }
 
     public void tableChildrenLoaded(DirectoryItem directoryItem) {
@@ -75,4 +94,7 @@ public class Application {
         mainFrame.refreshTree(directoryItem);
     }
 
+    public void previewTextLoaded(String text) {
+        mainFrame.showPreviewText(text);
+    }
 }

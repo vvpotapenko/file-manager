@@ -7,15 +7,21 @@ import javax.swing.*;
 public class FileItem {
 
     private final String name;
+    private final FileType fileType;
     private final IFileSource fileSource;
 
-    public FileItem(String name, IFileSource fileSource) {
+    public FileItem(String name, FileType fileType, IFileSource fileSource) {
         this.name = name;
+        this.fileType = fileType;
         this.fileSource = fileSource;
     }
 
     public String getName() {
         return name;
+    }
+
+    public FileType getFileType() {
+        return fileType;
     }
 
     public Icon getSystemIcon() {
