@@ -1,32 +1,34 @@
 package vvpotapenko.fmanager;
 
-import vvpotapenko.fmanager.model.DirectoryItem;
-import vvpotapenko.fmanager.model.FileItem;
-import vvpotapenko.fmanager.model.FileType;
-import vvpotapenko.fmanager.providers.RootSource;
-import vvpotapenko.fmanager.tasks.*;
+import vvpotapenko.fmanager.model.FileItemType;
+import vvpotapenko.fmanager.model.FileList;
+import vvpotapenko.fmanager.model.IFileItem;
+import vvpotapenko.fmanager.service.FileItemService;
+import vvpotapenko.fmanager.service.IFileItemService;
+import vvpotapenko.fmanager.service.root.RootFileItem;
+import vvpotapenko.fmanager.tasks.LoadChildrenTask;
+import vvpotapenko.fmanager.ui.IMainFrameListener;
 import vvpotapenko.fmanager.ui.MainFrame;
-import vvpotapenko.fmanager.ui.table.IFilesTableListener;
-import vvpotapenko.fmanager.ui.tree.IFilesTreeListener;
 
 import javax.swing.*;
-import java.awt.*;
+import java.util.List;
 
-public class Application {
+public class Application implements IMainFrameListener {
 
+    private final IFileItemService fileItemService = new FileItemService();
+
+    private FileList fileList;
     private MainFrame mainFrame;
-    private DirectoryItem treeRoot;
 
     void run() {
         SwingUtilities.invokeLater(this::createAndShowGUI);
     }
 
     private void createAndShowGUI() {
-        treeRoot = new RootSource(true).createDirectoryItem();
+        fileList = new FileList();
         createView();
 
-        DirectoryItem tableDir = new DirectoryItem("top", new RootSource(false));
-        new LoadTableChildrenTask(tableDir, this).execute();
+        openDirectory(new RootFileItem());
     }
 
     private void createView() {
@@ -36,76 +38,37 @@ public class Application {
             e.printStackTrace();
         }
 
-        mainFrame = new MainFrame(treeRoot,
-                new IFilesTreeListener() {
-                    @Override
-                    public void directoryExpanded(DirectoryItem directoryItem) {
-                        new LoadTreeChildrenTask(directoryItem, Application.this).execute();
-                    }
-
-                    @Override
-                    public void directoryCollapsed(DirectoryItem directoryItem) {
-                        new DestroyTreeChildrenTask(directoryItem, Application.this).execute();
-                    }
-
-                    @Override
-                    public void directorySelected(DirectoryItem directoryItem) {
-                        new LoadTableFromTreeTask(directoryItem, Application.this).execute();
-                    }
-                },
-                new IFilesTableListener() {
-                    @Override
-                    public void directoryClicked(DirectoryItem directoryItem) {
-                        new LoadTableChildrenTask(directoryItem, Application.this).execute();
-                    }
-
-                    @Override
-                    public void upClicked(DirectoryItem currentDir) {
-                        new LoadParentTableChildrenTask(currentDir, Application.this).execute();
-                    }
-
-                    @Override
-                    public void fileClicked(FileItem fileItem) {
-                        handlePreviewFile(fileItem);
-                    }
-                });
+        mainFrame = new MainFrame(fileList, this);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.pack();
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainFrame.setVisible(true);
     }
 
-    private void handlePreviewFile(FileItem fileItem) {
-        FileType fileType = fileItem.getFileType();
-        if (fileType == null || fileType == FileType.UNKNOWN) {
-            mainFrame.showWarningMessage(Resources.getString("file.type.was.not.detected"));
-            return;
+    public void childrenLoaded(List<IFileItem> children) {
+        fileList.setItems(children);
+        mainFrame.refreshTable();
+    }
+
+    private void openDirectory(IFileItem fileItem) {
+        fileList.setCurrentDirectory(fileItem);
+
+        fileList.showLoading();
+        mainFrame.refreshTable();
+
+        new LoadChildrenTask(fileList.getCurrentDirectory(), fileItemService, this).execute();
+    }
+
+    @Override
+    public void rowClicked(IFileItem fileItem) {
+        if (fileItem.isDirectory()) {
+            openDirectory(fileItem);
+        } else if (fileItem.getFileType() == FileItemType.UP) {
+            // TODO go up
+        } else if (fileItem.getFileType() == FileItemType.LOADING) {
+            // ignore loading indicator
+        } else {
+            // TODO show preview
         }
-
-        switch (fileType) {
-            case TEXT:
-                new LoadPreviewTextTask(fileItem, this).execute();
-                break;
-            case JPG:
-            case PNG:
-                new LoadPreviewImageTask(fileItem, this).execute();
-                break;
-        }
-    }
-
-    public void tableChildrenLoaded(DirectoryItem directoryItem) {
-        mainFrame.updateTable(directoryItem);
-    }
-
-    public void treeChildrenLoaded(DirectoryItem directoryItem) {
-        mainFrame.refreshTree(directoryItem);
-    }
-
-    public void previewTextLoaded(String text, String fileName) {
-        mainFrame.showPreviewText(text, fileName);
-    }
-
-    public void previewImageLoaded(Image img, String fileName) {
-        mainFrame.showPreviewImage(img, fileName);
     }
 }

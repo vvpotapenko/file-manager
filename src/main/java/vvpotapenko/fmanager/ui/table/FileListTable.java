@@ -1,37 +1,24 @@
 package vvpotapenko.fmanager.ui.table;
 
-import vvpotapenko.fmanager.model.DirectoryItem;
-import vvpotapenko.fmanager.model.FileItem;
+import vvpotapenko.fmanager.model.FileList;
+import vvpotapenko.fmanager.model.IFileItem;
+import vvpotapenko.fmanager.ui.IMainFrameListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class FilesTable extends JScrollPane {
+public class FileListTable extends JScrollPane {
 
-    private final IFilesTableListener listener;
+    private final JTable table;
+    private final IMainFrameListener listener;
 
-    private JTable table;
-    private DirectoryItem currentDir;
-
-    public FilesTable(IFilesTableListener listener) {
+    public FileListTable(FileList fileList, IMainFrameListener listener) {
         this.listener = listener;
-        initializeLayout();
-    }
 
-    public void showFiles(DirectoryItem directoryItem) {
-        currentDir = directoryItem;
-        getModel().updateRows(currentDir);
-    }
-
-    private FilesTableModel getModel() {
-        return (FilesTableModel) table.getModel();
-    }
-
-    private void initializeLayout() {
         table = new JTable();
-        table.setModel(new FilesTableModel());
+        table.setModel(new FileListTableModel(fileList));
         table.setShowVerticalLines(false);
         table.setShowHorizontalLines(false);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -54,14 +41,16 @@ public class FilesTable extends JScrollPane {
         setViewportView(table);
     }
 
+    private FileListTableModel getModel() {
+        return (FileListTableModel) table.getModel();
+    }
+
     private void handleDoubleClickRow(int row) {
-        FileItem fileItem = getModel().getFileItemByRow(row);
-        if (fileItem == null) {
-            listener.upClicked(currentDir);
-        } else if (fileItem.isDirectory()) {
-            listener.directoryClicked((DirectoryItem) fileItem);
-        } else {
-            listener.fileClicked(fileItem);
-        }
+        IFileItem fileItem = getModel().getItem(row);
+        listener.rowClicked(fileItem);
+    }
+
+    public void refreshList() {
+        getModel().fireTableDataChanged();
     }
 }

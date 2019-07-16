@@ -1,6 +1,6 @@
-package vvpotapenko.fmanager.providers;
+package vvpotapenko.fmanager.service;
 
-import vvpotapenko.fmanager.model.FileType;
+import vvpotapenko.fmanager.model.FileItemType;
 
 public class FileTypeDetector {
 
@@ -10,16 +10,16 @@ public class FileTypeDetector {
      * @param fileName file name with extension
      * @return detected file type
      */
-    public FileType getFileType(String fileName) {
+    public FileItemType getFileType(String fileName) {
         if (fileName.toLowerCase().endsWith(".txt")) {
-            return FileType.TEXT;
+            return FileItemType.TEXT;
         }
         if (fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg")) {
-            return FileType.JPG;
+            return FileItemType.JPG;
         }
         if (fileName.toLowerCase().endsWith(".png")) {
-            return FileType.PNG;
+            return FileItemType.PNG;
         }
-        return FileType.UNKNOWN;
+        return FileItemType.UNKNOWN;
     }
 }

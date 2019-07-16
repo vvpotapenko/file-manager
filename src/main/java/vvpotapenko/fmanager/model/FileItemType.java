@@ -1,9 +1,12 @@
 package vvpotapenko.fmanager.model;
 
-public enum FileType {
+public enum FileItemType {
     TEXT,
     JPG,
     PNG,
-    DIRECTORY,
+
+    LOADING,
+    UP,
+
     UNKNOWN
 }

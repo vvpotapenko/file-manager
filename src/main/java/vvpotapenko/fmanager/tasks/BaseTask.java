@@ -21,11 +21,13 @@ abstract class BaseTask<T, V> extends SwingWorker<T, V> {
     protected void done() {
         try {
             T t = get();
-            handleResult(t);
+            afterJob(t);
         } catch (Exception e) {
             handleException(e);
         }
     }
 
-    abstract void handleResult(T result);
+    void afterJob(T result) {
+        // do nothing by default
+    }
 }
