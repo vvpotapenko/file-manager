@@ -64,7 +64,8 @@ public class Application implements IMainFrameListener {
         if (fileItem.isDirectory()) {
             openDirectory(fileItem);
         } else if (fileItem.getFileType() == FileItemType.UP) {
-            // TODO go up
+            IFileItem parent = fileList.getCurrentDirectory().getParent();
+            if (parent != null) openDirectory(parent);
         } else if (fileItem.getFileType() == FileItemType.LOADING) {
             // ignore loading indicator
         } else {
