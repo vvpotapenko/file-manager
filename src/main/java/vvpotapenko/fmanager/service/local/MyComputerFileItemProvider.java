@@ -2,13 +2,13 @@ package vvpotapenko.fmanager.service.local;
 
 import vvpotapenko.fmanager.model.IFileItem;
 import vvpotapenko.fmanager.model.UpFileItem;
-import vvpotapenko.fmanager.service.IFileItemProvider;
+import vvpotapenko.fmanager.service.BaseFileItemProvider;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyComputerFileItemProvider implements IFileItemProvider {
+public class MyComputerFileItemProvider extends BaseFileItemProvider {
 
     @Override
     public boolean canHandle(IFileItem fileItem) {

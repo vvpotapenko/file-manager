@@ -13,8 +13,7 @@ abstract class BaseTask<T, V> extends SwingWorker<T, V> {
     }
 
     private void handleException(Exception e) {
-        e.printStackTrace();
-        // TODO handle exception
+        app.handleException(e);
     }
 
     @Override

@@ -7,10 +7,13 @@ import vvpotapenko.fmanager.service.FileItemService;
 import vvpotapenko.fmanager.service.IFileItemService;
 import vvpotapenko.fmanager.service.root.RootFileItem;
 import vvpotapenko.fmanager.tasks.LoadChildrenTask;
+import vvpotapenko.fmanager.tasks.LoadPreviewImageTask;
+import vvpotapenko.fmanager.tasks.LoadPreviewTextTask;
 import vvpotapenko.fmanager.ui.IMainFrameListener;
 import vvpotapenko.fmanager.ui.MainFrame;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 public class Application implements IMainFrameListener {
@@ -45,6 +48,11 @@ public class Application implements IMainFrameListener {
         mainFrame.setVisible(true);
     }
 
+    public void handleException(Exception e) {
+        e.printStackTrace();
+        mainFrame.showErrorMessage(e.getMessage());
+    }
+
     public void childrenLoaded(List<IFileItem> children) {
         fileList.setItems(children);
         mainFrame.refreshTable();
@@ -69,7 +77,34 @@ public class Application implements IMainFrameListener {
         } else if (fileItem.getFileType() == FileItemType.LOADING) {
             // ignore loading indicator
         } else {
-            // TODO show preview
+            handlePreviewFile(fileItem);
         }
+    }
+
+    private void handlePreviewFile(IFileItem fileItem) {
+        FileItemType fileType = fileItem.getFileType();
+        if (fileType == null || fileType == FileItemType.UNKNOWN) {
+            mainFrame.clearPreview();
+            mainFrame.showWarningMessage(Resources.getString("file.type.was.not.detected"));
+            return;
+        }
+
+        switch (fileType) {
+            case TEXT:
+                new LoadPreviewTextTask(fileItem, fileItemService, this).execute();
+                break;
+            case JPG:
+            case PNG:
+                new LoadPreviewImageTask(fileItem, fileItemService, this).execute();
+                break;
+        }
+    }
+
+    public void previewImageLoaded(Image image, String fileName) {
+        mainFrame.showPreviewImage(image, fileName);
+    }
+
+    public void previewTextLoaded(String text, String fileName) {
+        mainFrame.showPreviewText(text, fileName);
     }
 }

@@ -6,6 +6,7 @@ import vvpotapenko.fmanager.service.local.MyComputerFileItemProvider;
 import vvpotapenko.fmanager.service.root.RootFileItemProvider;
 import vvpotapenko.fmanager.service.zip.ZipFileItemProvider;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +22,22 @@ public class FileItemService implements IFileItemService {
     }
 
     @Override
-    public List<IFileItem> getChildren(IFileItem parent) throws Exception {
+    public List<IFileItem> getChildren(IFileItem directory) throws Exception {
         for (IFileItemProvider provider : providers) {
-            if (provider.canHandle(parent)) {
-                return provider.listFiles(parent);
+            if (provider.canHandle(directory)) {
+                return provider.listFiles(directory);
             }
         }
-        throw new Exception("There is no provider for " + parent.getClass());
+        throw new Exception("There is no provider for " + directory.getClass());
+    }
+
+    @Override
+    public InputStream createInputStream(IFileItem fileItem) throws Exception {
+        for (IFileItemProvider provider : providers) {
+            if (provider.canHandle(fileItem)) {
+                return provider.createInputStream(fileItem);
+            }
+        }
+        throw new Exception("There is no provider for " + fileItem.getClass());
     }
 }

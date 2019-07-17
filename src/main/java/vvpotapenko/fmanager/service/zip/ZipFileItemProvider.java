@@ -1,13 +1,11 @@
 package vvpotapenko.fmanager.service.zip;
 
+import org.apache.commons.io.FileUtils;
 import vvpotapenko.fmanager.model.IFileItem;
 import vvpotapenko.fmanager.model.UpFileItem;
 import vvpotapenko.fmanager.service.BaseFileItemProvider;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -37,6 +35,12 @@ public class ZipFileItemProvider extends BaseFileItemProvider {
         Collections.sort(items);
         items.add(0, UpFileItem.getInstance());
         return items;
+    }
+
+    @Override
+    public InputStream createInputStream(IFileItem fileItem) throws Exception {
+        ZipFileItem zipFileItem = (ZipFileItem) fileItem;
+        return FileUtils.openInputStream(zipFileItem.file);
     }
 
     private File getTempDirectory(ZipFileItem zipFileItem) throws IOException {

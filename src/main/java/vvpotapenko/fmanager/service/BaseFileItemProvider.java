@@ -7,6 +7,7 @@ import vvpotapenko.fmanager.service.local.LocalFileItem;
 import vvpotapenko.fmanager.service.zip.ZipFileItem;
 
 import java.io.File;
+import java.io.InputStream;
 
 public abstract class BaseFileItemProvider implements IFileItemProvider {
 
@@ -21,5 +22,10 @@ public abstract class BaseFileItemProvider implements IFileItemProvider {
             FileItemType fileType = fileTypeDetector.getFileType(file.getName());
             return new LocalFileItem(file, fileType, directory);
         }
+    }
+
+    @Override
+    public InputStream createInputStream(IFileItem fileItem) throws Exception {
+        throw new Exception("Not Supported");
     }
 }

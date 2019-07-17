@@ -1,13 +1,13 @@
 package vvpotapenko.fmanager.service.root;
 
 import vvpotapenko.fmanager.model.IFileItem;
-import vvpotapenko.fmanager.service.IFileItemProvider;
+import vvpotapenko.fmanager.service.BaseFileItemProvider;
 import vvpotapenko.fmanager.service.local.MyComputerFileItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RootFileItemProvider implements IFileItemProvider {
+public class RootFileItemProvider extends BaseFileItemProvider {
 
     @Override
     public boolean canHandle(IFileItem fileItem) {

@@ -1,10 +1,12 @@
 package vvpotapenko.fmanager.service.local;
 
+import org.apache.commons.io.FileUtils;
 import vvpotapenko.fmanager.model.IFileItem;
 import vvpotapenko.fmanager.model.UpFileItem;
 import vvpotapenko.fmanager.service.BaseFileItemProvider;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,5 +33,11 @@ public class LocalFileItemProvider extends BaseFileItemProvider {
         items.add(0, UpFileItem.getInstance());
 
         return items;
+    }
+
+    @Override
+    public InputStream createInputStream(IFileItem fileItem) throws Exception {
+        BaseLocalFileItem localFileItem = (BaseLocalFileItem) fileItem;
+        return FileUtils.openInputStream(localFileItem.file);
     }
 }
