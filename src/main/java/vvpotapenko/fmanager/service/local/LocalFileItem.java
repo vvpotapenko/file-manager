@@ -12,7 +12,7 @@ public class LocalFileItem extends BaseLocalFileItem {
 
     private final String displaySize;
 
-    LocalFileItem(File file, FileItemType fileType, IFileItem parent) {
+    public LocalFileItem(File file, FileItemType fileType, IFileItem parent) {
         super(file, parent);
         this.fileType = fileType;
 

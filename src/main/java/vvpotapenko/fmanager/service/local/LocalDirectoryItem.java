@@ -7,7 +7,7 @@ import java.io.File;
 
 public class LocalDirectoryItem extends BaseLocalFileItem {
 
-    LocalDirectoryItem(File file, IFileItem parent) {
+    public LocalDirectoryItem(File file, IFileItem parent) {
         super(file, parent);
     }
 

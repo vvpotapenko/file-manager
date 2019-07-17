@@ -2,7 +2,7 @@ package vvpotapenko.fmanager.model;
 
 import javax.swing.*;
 
-public interface IFileItem {
+public interface IFileItem extends Comparable<IFileItem> {
 
     String getName();
 
