@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 public abstract class BaseFileItemProvider implements IFileItemProvider {
 
-    private final FileTypeDetector fileTypeDetector = new FileTypeDetector();
+    protected final FileTypeDetector fileTypeDetector = new FileTypeDetector();
 
     protected IFileItem createLocalFileItem(File file, IFileItem directory) {
         if (file.isDirectory()) {

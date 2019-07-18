@@ -1,6 +1,9 @@
 package vvpotapenko.fmanager.service;
 
 import vvpotapenko.fmanager.model.IFileItem;
+import vvpotapenko.fmanager.service.ftp.FtpFileItemProvider;
+import vvpotapenko.fmanager.service.ftp.FtpHostItemProvider;
+import vvpotapenko.fmanager.service.ftp.FtpRootItemProvider;
 import vvpotapenko.fmanager.service.local.LocalFileItemProvider;
 import vvpotapenko.fmanager.service.local.MyComputerFileItemProvider;
 import vvpotapenko.fmanager.service.root.RootFileItemProvider;
@@ -19,6 +22,9 @@ public class FileItemService implements IFileItemService {
         providers.add(new MyComputerFileItemProvider());
         providers.add(new LocalFileItemProvider());
         providers.add(new ZipFileItemProvider());
+        providers.add(new FtpRootItemProvider());
+        providers.add(new FtpHostItemProvider());
+        providers.add(new FtpFileItemProvider());
     }
 
     @Override
