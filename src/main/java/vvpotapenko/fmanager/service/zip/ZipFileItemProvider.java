@@ -58,7 +58,7 @@ public class ZipFileItemProvider extends BaseFileItemProvider {
 
     private void unzipFile(File zipFile, String filePath) throws IOException {
         File tempDirectory = Files.createTempDirectory("fs-").toFile();
-        if (!tempDirectory.exists()) tempDirectory.mkdirs();
+        FileUtils.forceMkdir(tempDirectory);
 
         byte[] buffer = new byte[1024];
         try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile))) {
@@ -66,9 +66,9 @@ public class ZipFileItemProvider extends BaseFileItemProvider {
             while (zipEntry != null) {
                 File destFile = new File(tempDirectory, zipEntry.getName());
                 if (zipEntry.isDirectory()) {
-                    destFile.mkdirs();
+                    FileUtils.forceMkdir(destFile);
                 } else {
-                    new File(destFile.getParent()).mkdirs();
+                    FileUtils.forceMkdirParent(destFile);
                     try (FileOutputStream fos = new FileOutputStream(destFile)) {
                         int len;
                         while ((len = zipInputStream.read(buffer)) > 0) {

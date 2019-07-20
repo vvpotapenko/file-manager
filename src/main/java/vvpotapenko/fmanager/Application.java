@@ -5,7 +5,9 @@ import vvpotapenko.fmanager.model.FileList;
 import vvpotapenko.fmanager.model.IFileItem;
 import vvpotapenko.fmanager.service.FileItemService;
 import vvpotapenko.fmanager.service.IFileItemService;
+import vvpotapenko.fmanager.service.ftp.storage.FtpHost;
 import vvpotapenko.fmanager.service.root.RootFileItem;
+import vvpotapenko.fmanager.tasks.CreateFtpHostTask;
 import vvpotapenko.fmanager.tasks.LoadChildrenTask;
 import vvpotapenko.fmanager.tasks.LoadPreviewImageTask;
 import vvpotapenko.fmanager.tasks.LoadPreviewTextTask;
@@ -56,6 +58,7 @@ public class Application implements IMainFrameListener {
     public void childrenLoaded(List<IFileItem> children) {
         fileList.setItems(children);
         mainFrame.refreshTable();
+        mainFrame.refreshActions();
     }
 
     private void openDirectory(IFileItem fileItem) {
@@ -79,6 +82,14 @@ public class Application implements IMainFrameListener {
         } else {
             handlePreviewFile(fileItem);
         }
+    }
+
+    @Override
+    public void ftpHostCreated(FtpHost ftpHost) {
+        fileList.showLoading();
+        mainFrame.refreshTable();
+
+        new CreateFtpHostTask(ftpHost, this).execute();
     }
 
     private void handlePreviewFile(IFileItem fileItem) {
@@ -106,5 +117,9 @@ public class Application implements IMainFrameListener {
 
     public void previewTextLoaded(String text, String fileName) {
         mainFrame.showPreviewText(text, fileName);
+    }
+
+    public void ftpHostListSaved() {
+        new LoadChildrenTask(fileList.getCurrentDirectory(), fileItemService, this).execute();
     }
 }

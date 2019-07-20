@@ -2,11 +2,20 @@ package vvpotapenko.fmanager.service.ftp.storage;
 
 public class FtpHost {
 
+    private String uuid;
     private String hostname;
     private String username;
     private String password;
-    private boolean anonymous;
-    private boolean passiveMode;
+    private boolean anonymous = true;
+    private boolean passiveMode = true;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
     public String getHostname() {
         return hostname;

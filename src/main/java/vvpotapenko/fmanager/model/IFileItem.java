@@ -1,6 +1,7 @@
 package vvpotapenko.fmanager.model;
 
 import javax.swing.*;
+import java.util.Collection;
 
 public interface IFileItem extends Comparable<IFileItem> {
 
@@ -15,4 +16,6 @@ public interface IFileItem extends Comparable<IFileItem> {
     boolean isDirectory();
 
     IFileItem getParent();
+
+    Collection<FileItemActionType> getAvailableActions();
 }

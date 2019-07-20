@@ -1,5 +1,8 @@
 package vvpotapenko.fmanager.model;
 
+import java.util.Collection;
+import java.util.Collections;
+
 public abstract class BaseFileItem implements IFileItem {
 
     private final IFileItem parent;
@@ -11,6 +14,11 @@ public abstract class BaseFileItem implements IFileItem {
     @Override
     public IFileItem getParent() {
         return parent;
+    }
+
+    @Override
+    public Collection<FileItemActionType> getAvailableActions() {
+        return Collections.emptyList();
     }
 
     @Override

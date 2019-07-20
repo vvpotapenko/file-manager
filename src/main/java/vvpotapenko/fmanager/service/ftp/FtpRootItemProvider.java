@@ -4,6 +4,7 @@ import vvpotapenko.fmanager.model.IFileItem;
 import vvpotapenko.fmanager.model.UpFileItem;
 import vvpotapenko.fmanager.service.BaseFileItemProvider;
 import vvpotapenko.fmanager.service.ftp.storage.FtpHost;
+import vvpotapenko.fmanager.service.ftp.storage.FtpHostList;
 import vvpotapenko.fmanager.service.ftp.storage.FtpHostListStorage;
 
 import java.util.ArrayList;
@@ -23,8 +24,8 @@ public class FtpRootItemProvider extends BaseFileItemProvider {
         List<IFileItem> items = new ArrayList<>();
         items.add(UpFileItem.getInstance());
 
-        List<FtpHost> ftpHosts = storage.load();
-        for (FtpHost host : ftpHosts) {
+        FtpHostList ftpHosts = storage.load();
+        for (FtpHost host : ftpHosts.getHosts()) {
             items.add(new FtpHostItem(host, directory));
         }
 

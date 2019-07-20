@@ -1,33 +1,39 @@
 package vvpotapenko.fmanager.service.ftp.storage;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 
 public class FtpHostListStorage {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
-    public void save(List<FtpHost> list) throws Exception {
-        // TODO
+    public FtpHostListStorage() {
+        objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
-    public List<FtpHost> load() throws Exception {
-        // TODO
-        List<FtpHost> hosts = new ArrayList<>();
-        FtpHost host = new FtpHost();
-        host.setHostname("mirror.waia.asn.au");
-        host.setPassiveMode(true);
-        host.setAnonymous(true);
-        hosts.add(host);
+    public void save(FtpHostList hostList) throws Exception {
+        File hostFile = getConfigHostFile();
+        FileUtils.forceMkdirParent(hostFile);
 
-        host = new FtpHost();
-        host.setHostname("ftp.netspace.net.au");
-        host.setPassiveMode(true);
-        host.setAnonymous(true);
-        hosts.add(host);
+        objectMapper.writeValue(hostFile, hostList);
+    }
 
-        return hosts;
+    public FtpHostList load() throws Exception {
+        File configFile = getConfigHostFile();
+        if (configFile.exists()) {
+            return objectMapper.readValue(configFile, FtpHostList.class);
+        } else {
+            return new FtpHostList();
+        }
+    }
+
+    private File getConfigHostFile() {
+        String home = System.getProperty("user.home");
+        return new File(home, FilenameUtils.concat(".fs-manager", "ftp-hosts.json"));
     }
 }
